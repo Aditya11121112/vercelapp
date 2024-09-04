@@ -12,6 +12,9 @@ app.use(cors());
 
 //register route
 
+app.get("/", (req, res) => {
+  res.send("hellow");
+});
 app.post("/api/v1/register", register);
 app.post("/api/v1/login", login);
 
