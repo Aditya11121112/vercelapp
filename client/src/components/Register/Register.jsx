@@ -28,7 +28,7 @@ function Register() {
       const response = await axios.post('https://backend-zeta-two-76.vercel.app/register', formData);
       console.log('Registration successful:', response.data);
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error('Registration failed:', error.message);
     }
   };
 
