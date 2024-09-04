@@ -21,8 +21,8 @@ app.use(
 app.get("/", (req, res) => {
   res.send("hellow");
 });
-app.post("/api/v1/register", register);
-app.post("/api/v1/login", login);
+app.post("/register", register);
+app.post("/login", login);
 
 await mongoose
   .connect(
