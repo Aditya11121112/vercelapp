@@ -18,12 +18,14 @@ function Register() {
       [e.target.name]: e.target.value
     });
   };
-
+ 
+  axios.defaults.withCredentials = true;
+   
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       // You can replace the URL with your registration API endpoint
-      const response = await axios.post('http://localhost:4000/api/v1/register', formData);
+      const response = await axios.post('backend-zeta-two-76.vercel.app/register', formData);
       console.log('Registration successful:', response.data);
     } catch (error) {
       console.error('Registration failed:', error);
