@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "frontend-one-flax-26.vercel.app",
+    origin: "https://frontend-one-flax-26.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
   })
