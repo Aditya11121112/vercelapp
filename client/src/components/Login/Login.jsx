@@ -24,7 +24,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('backend-zeta-two-76.vercel.app/login', formData);
+      const response = await axios.post('http://backend-zeta-two-76.vercel.app/login', formData);
       console.log('Login successful:', response.data);
       // Redirect or handle successful login here
     } catch (error) {
