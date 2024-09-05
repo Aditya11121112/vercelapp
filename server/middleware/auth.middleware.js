@@ -3,13 +3,13 @@ import jwt from "jsonwebtoken";
 const validate_token = async (req, res, next) => {
   const token = await req.cookies.access_token;
   const tokenverify = token ? req.cookies.access_token : "";
-
-  if (token == "") {
+  console.log(tokenverify);
+  if (tokenverify == "") {
     console.log("token", tokenverify);
-    return res.json({ message: "token not avaialbale", data: "" });
+    return res.json({ message: "token not avaialbale", data: null });
   }
 
-  jwt.verify(token, "adi", (err, decode) => {
+  await jwt.verify(token, "adi", (err, decode) => {
     if (err) {
       // Handle error scenario when token is invalid or expired
       return res.json({

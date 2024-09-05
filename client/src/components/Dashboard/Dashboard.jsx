@@ -4,37 +4,47 @@ import './Dashboard.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const getCookies = () => {
+  const cookies = document.cookie.split('; ');
+  const cookieObject = {};
+  cookies.forEach((cookie) => {
+    const [name, value] = cookie.split('=');
+    cookieObject[name] = decodeURIComponent(value);
+  });
+  return cookieObject;
+};
+
 function Dashboard() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({ name: '', email: '' }); // State to hold user data
 
-  // Authentication check on dashboard that logged-in user can access
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        // Make a request to the backend to validate the access token
-        const production = 'https://backend-zeta-two-76.vercel.app/validate-token';
-        const local = 'https://localhost:3000/validate-token';
-        const response = await axios.get(production, { withCredentials: true });
-        console.log('Dashboard data:', response.data.data);
-        if (response.data.data === '') {
-          navigate('/login');
-        } else {
-          setUserData(response.data.data.name); // Set user data if token is valid
-        }
-      } catch (error) {
-        // If there is an error (e.g., 401 Unauthorized), redirect to the login page
-        console.error('User not authenticated:', error.message);
-        navigate('/login'); // Redirect to the login page
-      }
-    };
 
-    checkAuthentication(); // Call the authentication check on component mount
-  }, [navigate]);
+
+
+  useEffect(()=>{
+    if(!getCookies().access_token){
+      navigate('/login')
+    }
+
+    const local = 'http://localhost:3000/validate-token';
+   axios.get(local, { withCredentials: true }).then((response)=>{
+      
+         console.log('dashboad data',response.data);
+         setUserData(response.data.data);
+     
+          }).catch((err)=>{
+               console.log("error in ui in dahboard",err.message)
+          });
+          
+
+  },[navigate])
+
+
+  
 
   const handleLogout = async () => {
     // Implement logout logic here
-    await axios.post('http://localhost:3000/logout', {}, { withCredentials: true });
+    await axios.post('https://backend-zeta-two-76.vercel.app/logout', {}, { withCredentials: true });
     console.log('User logged out');
     navigate('/login');
   };
@@ -45,7 +55,7 @@ function Dashboard() {
   };
 
   const handleGetProfile = () => {
-    // Implement get profile logic here
+    // Implement get profile logic hereDashboard
     console.log('Get Profile');
   };
 
