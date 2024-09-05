@@ -1,9 +1,22 @@
 // src/components/login/Login.js
 
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
+
+
+
+const getCookies = () => {
+  const cookies = document.cookie.split('; ');
+  const cookieObject = {};
+  cookies.forEach((cookie) => {
+    const [name, value] = cookie.split('=');
+    cookieObject[name] = decodeURIComponent(value);
+  });
+  return cookieObject;
+};
+
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -12,21 +25,35 @@ function Login() {
   });
 
   const navigate = useNavigate();
+useEffect(()=>{
+  if(getCookies().access_token){
+    navigate('/dashboard')
+  }
+},[navigate])
+
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-  };
 
-   axios.defaults.withCredentials = true;
+  };
+  
+
+
+  axios.defaults.withCredentials = true;
   const handleSubmit = async (e) => {
+
+    
     e.preventDefault();
     try {
-      const response = await axios.post('https://backend-zeta-two-76.vercel.app/login', formData);
+     
+      const production = 'https://backend-zeta-two-76.vercel.app/login';
+      const local = 'http://localhost:3000/login'
+      const response = await axios.post(production, formData);
       console.log('Login successful:', response.data);
-      // Redirect or handle successful login here
+      navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
     }
