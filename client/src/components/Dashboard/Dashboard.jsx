@@ -25,9 +25,9 @@ function Dashboard() {
     if(!getCookies().access_token){
       navigate('/login')
     }
-
+    const production = 'https://backend-zeta-two-76.vercel.app/validate-token';
     const local = 'http://localhost:3000/validate-token';
-   axios.get(local, { withCredentials: true }).then((response)=>{
+   axios.get(production, { withCredentials: true }).then((response)=>{
       
          console.log('dashboad data',response.data);
          setUserData(response.data.data);
