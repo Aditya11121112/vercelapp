@@ -52,7 +52,7 @@ useEffect(()=>{
       const production = 'https://backend-zeta-two-76.vercel.app/login';
       const local = 'http://localhost:3000/login'
      axios.post(production, formData,{ withCredentials: true }).then((response)=>{
-       localStorage.setItem('access_token', response.data);
+       localStorage.setItem('access_token', response.data.acces_token);
        console.log("data set login successfully",response.data);
         navigate('/dashboard');
      }).catch((error)=>{
