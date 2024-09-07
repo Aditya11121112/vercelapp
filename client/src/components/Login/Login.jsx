@@ -51,10 +51,14 @@ useEffect(()=>{
      
       const production = 'https://backend-zeta-two-76.vercel.app/login';
       const local = 'http://localhost:3000/login'
-      const response =  axios.post(production, formData,{ withCredentials: true });
-      console.log('Login successful:', response.data);
-      localStorage.setItem('access_token', response.data);
-      navigate('/dashboard');
+     axios.post(production, formData,{ withCredentials: true }).then((response)=>{
+       localStorage.setItem('access_token', response.data);
+       console.log("data set login successfully",response.data);
+        navigate('/dashboard');
+     }).catch((error)=>{
+       console.log("Error in login check on client side ",error.message)
+     });
+
     } catch (error) {
       console.error('Login failed:', error);
     }
