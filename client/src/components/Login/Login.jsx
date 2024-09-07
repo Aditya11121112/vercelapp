@@ -42,17 +42,20 @@ function Login() {
       const production = 'https://backend-zeta-two-76.vercel.app/login';
       const local = 'http://localhost:3000/login';
       
-      const response = await axios.post(production, formData, { withCredentials: true });
-
-      // Get the token from the response
-      const token = response.data.access_token;
-      
+      axios.post(production, formData, { withCredentials: true }).then((response)=>{
+         console.log("response in login ",response.data);
+          const token = response.data.access_token;
+         console.log("token",token);
       if (token) {
         // Store the token in local storage
         localStorage.setItem('access_token', token);
       }
+        navigate('/dashboard');
+      }).catch((err)=>{
+        console.log("error",err.message)
+      }
 
-      navigate('/dashboard');
+      
     } catch (error) {
       console.error('Error in login check on client side', error.message);
     }
