@@ -27,16 +27,15 @@ const login = async (req, res) => {
 
       // Set the token as a cookie
       res.cookie("access_token", generate_token, {
-        httpOnly: true, // Helps prevent XSS attacks
         maxAge: 60 * 60 * 1000, // Sets the cookie expiration time (in milliseconds)
-        secure: process.env.NODE_ENV === 'production', // Ensures the cookie is sent over HTTPS in production
-        sameSite: "Strict", // Prevents CSRF attacks
+        
       });
 
       // Send response back to the client
       return res.json({
         message: "User logged in successfully",
         data: user,
+        acces_token:generate_token
       });
     }
 
