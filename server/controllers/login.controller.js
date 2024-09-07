@@ -28,11 +28,7 @@ const login = async (req, res) => {
       });
 
       // Set the token as a cookie
-      res.cookie('access_token', generate_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Set to true in production
-        maxAge: 3600000, // 1 hour
-      });
+      res.cookie('access_token', generate_token, {expiryIN:'1h'});
 
       // Send response back to the client
       return res.json({
