@@ -26,10 +26,7 @@ const login = async (req, res) => {
       });
 
       // Set the token as a cookie
-      res.cookie("access_token", generate_token, {
-        maxAge: 60 * 60 * 1000, // Sets the cookie expiration time (in milliseconds)
-        
-      });
+      res.setHeader('Authorization', `Bearer ${generate_token}`)
 
       // Send response back to the client
       return res.json({
