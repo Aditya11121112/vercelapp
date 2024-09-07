@@ -1,11 +1,7 @@
-// src/components/login/Login.js
-
-import { useState ,useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
-
-
 
 const getCookies = () => {
   const cookies = document.cookie.split('; ');
@@ -17,7 +13,6 @@ const getCookies = () => {
   return cookieObject;
 };
 
-
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
@@ -25,47 +20,41 @@ function Login() {
   });
 
   const navigate = useNavigate();
-useEffect(()=>{
-  if(getCookies().access_token){
-    navigate('/dashboard')
-  }
-},[navigate])
 
+  useEffect(() => {
+    if (getCookies().access_token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-
   };
-  
-
 
   axios.defaults.withCredentials = true;
-  const handleSubmit = async (e) => {
 
-    
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-     
       const production = 'https://backend-zeta-two-76.vercel.app/login';
-      const local = 'http://localhost:3000/login'
+      const local = 'http://localhost:3000/login';
       
-     axios.post(production, formData,{ withCredentials: true }).then((response)=>{
-       const token = response.headers['authorization']?.split(' ')[1];
-    if (token) {
-      // Store the token in local storage
-      console.log("token",token)
-      localStorage.setItem('access_token', token);
-    }
-        navigate('/dashboard');
-     }).catch((error)=>{
-       console.log("Error in login check on client side ",error.message)
-     });
+      const response = await axios.post(production, formData, { withCredentials: true });
 
+      // Get the token from the response
+      const token = response.data.access_token;
+      
+      if (token) {
+        // Store the token in local storage
+        localStorage.setItem('access_token', token);
+      }
+
+      navigate('/dashboard');
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('Error in login check on client side', error.message);
     }
   };
 
