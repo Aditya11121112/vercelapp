@@ -1,31 +1,30 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 const validate_token = async (req, res, next) => {
-  const token = await localStorage.getItem('access_token');
-  const tokenverify = token ? token : "";
-  console.log("token verify",tokenverify);
-  if (tokenverify == "") {
-    console.log("token", tokenverify);
-    return res.json({ message: "token not avaialbale", data: null });
+  // Get token from Authorization header
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Extract token from 'Bearer <token>'
+  
+  if (!token) {
+    return res.status(401).json({ message: 'Token not available', data: null });
   }
 
-  await jwt.verify(token, "adi", (err, decode) => {
-    if (err) {
-      // Handle error scenario when token is invalid or expired
-      return res.json({
-        message: "Error in Authorized token",
-        data: null, // `datadecode` was undefined in your example
-        error: err.message,
-      });
-    }
-
-    // If the token is valid and decoded
-    console.log("Data decoded:", decode); // Logging the decoded data
+  try {
+    // Verify the token
+    const decoded = await jwt.verify(token, 'adi');
+    console.log('Data decoded:', decoded); // Logging the decoded data
     return res.json({
-      message: "Authorized User",
-      data: decode, // Use `decode` directly as it holds the decoded information
+      message: 'Authorized User',
+      data: decoded, // Use `decoded` directly as it holds the decoded information
     });
-  });
+  } catch (err) {
+    // Handle error scenario when token is invalid or expired
+    return res.status(401).json({
+      message: 'Error in Authorized token',
+      data: null,
+      error: err.message,
+    });
+  }
 };
 
 export { validate_token };
