@@ -1,4 +1,4 @@
-import { userModel } from "../models/register.models.js";
+teimport { userModel } from "../models/register.models.js";
 import jwt from "jsonwebtoken";
 
 const login = async (req, res) => {
@@ -16,10 +16,10 @@ const login = async (req, res) => {
 
       if (password == user.password) {
         //create the token on login
-         const access_token = await jwt.sign({ email, name }, "adi", {
+         const generate_token = await jwt.sign({ email, name }, "adi", {
           expiresIn: "1h",
         });
-        const access_token = await res.cookie('access_token', access_token, {
+        const access_token = await res.cookie('access_token', generate_token, {
     httpOnly: true, // Ensures the cookie is sent only in HTTP(S) requests and not accessible via JavaScript
     secure: process.env.NODE_ENV === 'production', // Ensures the cookie is only sent over HTTPS in production
     sameSite: 'Strict', // Prevents CSRF attacks by ensuring the cookie is only sent in requests originating from your site
