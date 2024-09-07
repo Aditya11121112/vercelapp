@@ -53,7 +53,7 @@ useEffect(()=>{
       const local = 'http://localhost:3000/login'
       const response =  axios.post(production, formData,{ withCredentials: true });
       console.log('Login successful:', response.data);
-      localStorage.setItem('access_token', response.data.data.access_token);
+      localStorage.setItem('access_token', response.data);
       navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
