@@ -1,5 +1,6 @@
 import { userModel } from "../models/register.models.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt"; // Make sure to install this package
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -16,8 +17,9 @@ const login = async (req, res) => {
       });
     }
 
-    // Check if password matches (use bcrypt for hashed passwords)
-    if (password === user.password) {
+    // Check if password matches
+    const isMatch = await bcrypt.compare(password, user.password); // Assuming passwords are hashed
+    if (isMatch) {
       const { email, name } = user;
 
       // Create the token on login
@@ -26,13 +28,17 @@ const login = async (req, res) => {
       });
 
       // Set the token as a cookie
-      res.setHeader('Authorization', `Bearer ${generate_token}`)
+      res.cookie('access_token', generate_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Set to true in production
+        maxAge: 3600000, // 1 hour
+      });
 
       // Send response back to the client
       return res.json({
         message: "User logged in successfully",
         data: user,
-        acces_token:generate_token
+        access_token: generate_token
       });
     }
 
