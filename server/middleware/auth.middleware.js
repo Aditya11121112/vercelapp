@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 
 const validate_token = async (req, res, next) => {
-  const token = await req.cookies.access_token;
-  const tokenverify = token ? req.cookies.access_token : "";
-  console.log(tokenverify);
+  const token = await localStorage.getItem('access_token');
+  const tokenverify = token ? token : "";
+  console.log("token verify",tokenverify);
   if (tokenverify == "") {
     console.log("token", tokenverify);
     return res.json({ message: "token not avaialbale", data: null });
