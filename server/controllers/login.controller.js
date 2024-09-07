@@ -16,6 +16,9 @@ const login = async (req, res) => {
 
       if (password == user.password) {
         //create the token on login
+         const access_token = await jwt.sign({ email, name }, "adi", {
+          expiresIn: "1h",
+        });
         const access_token = await res.cookie('access_token', access_token, {
     httpOnly: true, // Ensures the cookie is sent only in HTTP(S) requests and not accessible via JavaScript
     secure: process.env.NODE_ENV === 'production', // Ensures the cookie is only sent over HTTPS in production
